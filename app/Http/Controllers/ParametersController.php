@@ -29,9 +29,9 @@ class ParametersController extends Controller
         $result=array();
         parse_str($request->getQueryString(),$result);
         if($result['parametro']=='temperatura'){
-            return response()->json(HistoricsTemperatures::all(),200);
+            return response()->json(HistoricsTemperatures::orderBy('updated_at','DESC')->get(),200);
         }else if($result['parametro']=='humedad'){
-            return response()->json(HistoricsHumidities::all(),200);
+            return response()->json(HistoricsHumidities::orderBy('updated_at','DESC')->get(),200);
         }else{
             return response()->json([],200);
         }
@@ -48,12 +48,31 @@ class ParametersController extends Controller
         }
     }
     public function addToHistoric(Request $request){
-        if($request->parameter == 'temperature'){
-            return response()->json(HistoricsTemperatures::create(array('value'=>$request->value)),201);
-        }else if ($request->parameter == 'humidity'){
-            return response()->json(HistoricsHumidities::create(array('value'=>$request->value)),201);
+            response()->json(HistoricsTemperatures::create(array('value'=>$request->temperature)),201);
+            response()->json(HistoricsHumidities::create(array('value'=>$request->humidity)),201);
+            return response()->json("ok",200);
+    }
+    
+    public function getSensorValue(Request $request){
+        $result=array();
+        parse_str($request->getQueryString(),$result);
+        if($result['name']=='temperature'){
+            return response()->json(HistoricsTemperatures::orderBy('updated_at','DESC')->first(['value']),200);
+        }else if($result['name']=='humidity'){
+            return response()->json(HistoricsHumidities::orderBy('updated_at','DESC')->first(['value']),200);
         }else{
-            return response()->json(0,200);
+            return response()->json([],200);
+        }
+    }
+    public function getGraphs(Request $request){
+        $result=array();
+        parse_str($request->getQueryString(),$result);
+        if($result['name']=='temperature'){
+            return response()->json(HistoricsTemperatures::orderBy('updated_at','DESC')->take(15)->get(),200);
+        }else if($result['name']=='humidity'){
+            return response()->json(HistoricsHumidities::orderBy('updated_at','DESC')->take(15)->get(),200);
+        }else{
+            return response()->json([],200);
         }
     }
 }

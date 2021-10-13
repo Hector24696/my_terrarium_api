@@ -20,3 +20,15 @@ Route::get('/get-actuators', ['uses'=>'ActuatorController@getActuators']
 );
 Route::post('/update-actuators', ['uses'=>'ActuatorController@updateActuators']
 );
+Route::get('/get-sensor-value', ['uses'=>'ParametersController@getSensorValue']
+);
+Route::get('/get-graphs', ['uses'=>'ParametersController@getGraphs']
+);
+Route::get('/get-config', ['uses'=>'ConfigurationController@getConfig']
+);
+Route::post('/add-config', ['uses'=>'ConfigurationController@addConfig']
+);
+Route::delete('/delete-config', ['uses'=>'ConfigurationController@deleteConfig']
+);
+Route::get('/get-count', ['uses'=>'ConfigurationController@countConfig']
+);
